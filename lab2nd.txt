@@ -1,0 +1,28 @@
+mongodb> db.students.find().pretty()
+[
+  {
+    _id: ObjectId('68e4f344d23e7a14d6cebea6'),
+    name: 'Vysakh',
+    marks: 45
+  },
+  {
+    _id: ObjectId('68e4f344d23e7a14d6cebea7'),
+    name: 'Vignesh',
+    marks: 89
+  },
+  {
+    _id: ObjectId('68e4f344d23e7a14d6cebea8'),
+    name: 'Suresh',
+    marks: 54
+  }
+]
+mongodb> db.students.createIndex({marks: 1});
+marks_1
+mongodb> db.students.getIndexes();
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { marks: 1 }, name: 'marks_1' }
+]
+mongodb> db.students.dropIndex("marks_1");
+{ nIndexesWas: 2, ok: 1 }
+mongodb>
