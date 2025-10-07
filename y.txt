@@ -1,0 +1,298 @@
+Lab2> db.Products.insertMany([
+...     { productName: "Galaxy S21", category: "Smartphones", price: 799.99, stock: 10, discountAvailable: true },
+...     { productName: "iPhone 13", category: "Smartphones", price: 999.99, stock: 8, discountAvailable: false },
+...     { productName: "Dell XPS 13", category: "Laptops", price: 1299.99, stock: 6, discountAvailable: true },
+...     { productName: "HP Spectre x360", category: "Laptops", price: 1499.99, stock: 3, discountAvailable: false },
+...     { productName: "Sony Headphones", category: "Accessories", price: 199.99, stock: 15, discountAvailable: true },
+...     { productName: "Logitech Mouse", category: "Accessories", price: 49.99, stock: 20, discountAvailable: true },
+...     { productName: "MacBook Air", category: "Laptops", price: 999.99, stock: 7, discountAvailable: true },
+...     { productName: "Samsung Tablet", category: "Tablets", price: 299.99, stock: 12, discountAvailable: false },
+...     { productName: "Smart Watch", category: "Wearables", price: 249.99, stock: 5, discountAvailable: true },
+...     { productName: "Gaming Monitor", category: "Monitors", price: 399.99, stock: 4, discountAvailable: false }
+... ]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('68e537c4d23e7a14d6cebeb3'),
+    '1': ObjectId('68e537c4d23e7a14d6cebeb4'),
+    '2': ObjectId('68e537c4d23e7a14d6cebeb5'),
+    '3': ObjectId('68e537c4d23e7a14d6cebeb6'),
+    '4': ObjectId('68e537c4d23e7a14d6cebeb7'),
+    '5': ObjectId('68e537c4d23e7a14d6cebeb8'),
+    '6': ObjectId('68e537c4d23e7a14d6cebeb9'),
+    '7': ObjectId('68e537c4d23e7a14d6cebeba'),
+    '8': ObjectId('68e537c4d23e7a14d6cebebb'),
+    '9': ObjectId('68e537c4d23e7a14d6cebebc')
+  }
+}
+Lab2> db.Products.find({ price: { $lt: 1000}}, {_id: 0})
+[
+  {
+    productName: 'Galaxy S21',
+    category: 'Smartphones',
+    price: 799.99,
+    stock: 10,
+    discountAvailable: true
+  },
+  {
+    productName: 'iPhone 13',
+    category: 'Smartphones',
+    price: 999.99,
+    stock: 8,
+    discountAvailable: false
+  },
+  {
+    productName: 'Sony Headphones',
+    category: 'Accessories',
+    price: 199.99,
+    stock: 15,
+    discountAvailable: true
+  },
+  {
+    productName: 'Logitech Mouse',
+    category: 'Accessories',
+    price: 49.99,
+    stock: 20,
+    discountAvailable: true
+  },
+  {
+    productName: 'MacBook Air',
+    category: 'Laptops',
+    price: 999.99,
+    stock: 7,
+    discountAvailable: true
+  },
+  {
+    productName: 'Samsung Tablet',
+    category: 'Tablets',
+    price: 299.99,
+    stock: 12,
+    discountAvailable: false
+  },
+  {
+    productName: 'Smart Watch',
+    category: 'Wearables',
+    price: 249.99,
+    stock: 5,
+    discountAvailable: true
+  },
+  {
+    productName: 'Gaming Monitor',
+    category: 'Monitors',
+    price: 399.99,
+    stock: 4,
+    discountAvailable: false
+  }
+]
+Lab2> db.Products.findOne({ category: "Smartphone"})
+null
+Lab2> db.Product.findOne({ category: "Smartphones"})
+null
+Lab2> db.Product.findOne({category: 'Samrtphones'})
+null
+Lab2> db.Products.findOne({ category: "Smartphones" })
+{
+  _id: ObjectId('68e537c4d23e7a14d6cebeb3'),
+  productName: 'Galaxy S21',
+  category: 'Smartphones',
+  price: 799.99,
+  stock: 10,
+  discountAvailable: true
+}
+Lab2> db.Products.find({category: "Laptops", stock: {$gte: 5}})
+[
+  {
+    _id: ObjectId('68e537c4d23e7a14d6cebeb5'),
+    productName: 'Dell XPS 13',
+    category: 'Laptops',
+    price: 1299.99,
+    stock: 6,
+    discountAvailable: true
+  },
+  {
+    _id: ObjectId('68e537c4d23e7a14d6cebeb9'),
+    productName: 'MacBook Air',
+    category: 'Laptops',
+    price: 999.99,
+    stock: 7,
+    discountAvailable: true
+  }
+]
+Lab2> db.Products.find({$and: [{ category: "Laptops"}, { stock: {$gte: 5}})
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:68)
+
+> 1 | db.Products.find({$and: [{ category: "Laptops"}, { stock: {$gte: 5}})
+    |                                                                     ^
+  2 |
+
+Lab2> db.Products.find({$and: [{ category: "Laptops"}, { stock: {$gte: 5}}]})
+[
+  {
+    _id: ObjectId('68e537c4d23e7a14d6cebeb5'),
+    productName: 'Dell XPS 13',
+    category: 'Laptops',
+    price: 1299.99,
+    stock: 6,
+    discountAvailable: true
+  },
+  {
+    _id: ObjectId('68e537c4d23e7a14d6cebeb9'),
+    productName: 'MacBook Air',
+    category: 'Laptops',
+    price: 999.99,
+    stock: 7,
+    discountAvailable: true
+  }
+]
+Lab2> db.Products.find({$or: [{price: {$lt: 300}}, {discountAvailable: true}]})
+[
+  {
+    _id: ObjectId('68e537c4d23e7a14d6cebeb3'),
+    productName: 'Galaxy S21',
+    category: 'Smartphones',
+    price: 799.99,
+    stock: 10,
+    discountAvailable: true
+  },
+  {
+    _id: ObjectId('68e537c4d23e7a14d6cebeb5'),
+    productName: 'Dell XPS 13',
+    category: 'Laptops',
+    price: 1299.99,
+    stock: 6,
+    discountAvailable: true
+  },
+  {
+    _id: ObjectId('68e537c4d23e7a14d6cebeb7'),
+    productName: 'Sony Headphones',
+    category: 'Accessories',
+    price: 199.99,
+    stock: 15,
+    discountAvailable: true
+  },
+  {
+    _id: ObjectId('68e537c4d23e7a14d6cebeb8'),
+    productName: 'Logitech Mouse',
+    category: 'Accessories',
+    price: 49.99,
+    stock: 20,
+    discountAvailable: true
+  },
+  {
+    _id: ObjectId('68e537c4d23e7a14d6cebeb9'),
+    productName: 'MacBook Air',
+    category: 'Laptops',
+    price: 999.99,
+    stock: 7,
+    discountAvailable: true
+  },
+  {
+    _id: ObjectId('68e537c4d23e7a14d6cebeba'),
+    productName: 'Samsung Tablet',
+    category: 'Tablets',
+    price: 299.99,
+    stock: 12,
+    discountAvailable: false
+  },
+  {
+    _id: ObjectId('68e537c4d23e7a14d6cebebb'),
+    productName: 'Smart Watch',
+    category: 'Wearables',
+    price: 249.99,
+    stock: 5,
+    discountAvailable: true
+  }
+]
+Lab2> db.Products.find({price: {$ne: {1500}}})
+Uncaught:
+SyntaxError: Unexpected token (1:36)
+
+> 1 | db.Products.find({price: {$ne: {1500}}})
+    |                                     ^
+  2 |
+
+Lab2> db.Products.find({price: {$ne: 1500}})
+[
+  {
+    _id: ObjectId('68e537c4d23e7a14d6cebeb3'),
+    productName: 'Galaxy S21',
+    category: 'Smartphones',
+    price: 799.99,
+    stock: 10,
+    discountAvailable: true
+  },
+  {
+    _id: ObjectId('68e537c4d23e7a14d6cebeb4'),
+    productName: 'iPhone 13',
+    category: 'Smartphones',
+    price: 999.99,
+    stock: 8,
+    discountAvailable: false
+  },
+  {
+    _id: ObjectId('68e537c4d23e7a14d6cebeb5'),
+    productName: 'Dell XPS 13',
+    category: 'Laptops',
+    price: 1299.99,
+    stock: 6,
+    discountAvailable: true
+  },
+  {
+    _id: ObjectId('68e537c4d23e7a14d6cebeb6'),
+    productName: 'HP Spectre x360',
+    category: 'Laptops',
+    price: 1499.99,
+    stock: 3,
+    discountAvailable: false
+  },
+  {
+    _id: ObjectId('68e537c4d23e7a14d6cebeb7'),
+    productName: 'Sony Headphones',
+    category: 'Accessories',
+    price: 199.99,
+    stock: 15,
+    discountAvailable: true
+  },
+  {
+    _id: ObjectId('68e537c4d23e7a14d6cebeb8'),
+    productName: 'Logitech Mouse',
+    category: 'Accessories',
+    price: 49.99,
+    stock: 20,
+    discountAvailable: true
+  },
+  {
+    _id: ObjectId('68e537c4d23e7a14d6cebeb9'),
+    productName: 'MacBook Air',
+    category: 'Laptops',
+    price: 999.99,
+    stock: 7,
+    discountAvailable: true
+  },
+  {
+    _id: ObjectId('68e537c4d23e7a14d6cebeba'),
+    productName: 'Samsung Tablet',
+    category: 'Tablets',
+    price: 299.99,
+    stock: 12,
+    discountAvailable: false
+  },
+  {
+    _id: ObjectId('68e537c4d23e7a14d6cebebb'),
+    productName: 'Smart Watch',
+    category: 'Wearables',
+    price: 249.99,
+    stock: 5,
+    discountAvailable: true
+  },
+  {
+    _id: ObjectId('68e537c4d23e7a14d6cebebc'),
+    productName: 'Gaming Monitor',
+    category: 'Monitors',
+    price: 399.99,
+    stock: 4,
+    discountAvailable: false
+  }
+]
+Lab2>
