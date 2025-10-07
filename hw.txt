@@ -1,0 +1,32 @@
+mongodb> db.ticket.insertMany([
+...   {
+...     subject: "Login error",
+...     description: "User unable to login due to authentication error.",
+...     createdAt: new Date()
+...   },
+...   {
+...     subject: "Payment failure issue",
+...     description: "Customer reported payment failure when using credit card.",
+...     createdAt: new Date()
+...   }
+... ]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('68e4eca2d23e7a14d6cebea4'),
+    '1': ObjectId('68e4eca2d23e7a14d6cebea5')
+  }
+}
+mongodb> db.ticket.createIndex({subject: "text", description: "text"})
+subject_text_description_text
+mongodb> db.ticket.find({ $text: { $search: "error"}})
+[
+  {
+    _id: ObjectId('68e4eca2d23e7a14d6cebea4'),
+    subject: 'Login error',
+    description: 'User unable to login due to authentication error.',
+    createdAt: ISODate('2025-10-07T10:34:10.441Z')
+  }
+]
+mongodb> db.ticket.dropIndex("subject_text_description_text")
+{ nIndexesWas: 2, ok: 1 }
