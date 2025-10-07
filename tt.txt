@@ -1,0 +1,70 @@
+lab> db.posts.insertMany([
+...   {
+...     "title": "Getting Started with MongoDB",
+...     "author": "John Doe",
+...     "tags": ["MongoDB", "Database", "Tutorial"],
+...     "publishedDate": ISODate("2025-10-07T00:00:00Z")
+...   },
+...   {
+...     "title": "Mastering JavaScript Promises",
+...     "author": "Jane Smith",
+...     "tags": ["JavaScript", "Async", "Programming"],
+...     "publishedDate": ISODate("2025-09-25T00:00:00Z")
+...   },
+...   {
+...     "title": "Understanding Node.js Event Loop",
+...     "author": "John Doe",
+...     "tags": ["Node.js", "Backend", "Performance"],
+...     "publishedDate": ISODate("2025-08-10T00:00:00Z")
+...   },
+...   {
+...     "title": "Top 10 VS Code Extensions for Developers",
+...     "author": "Alice Johnson",
+...     "tags": ["VSCode", "Tools", "Productivity"],
+...     "publishedDate": ISODate("2025-07-15T00:00:00Z")
+...   },
+...   {
+...     "title": "A Beginner’s Guide to REST APIs",
+...     "author": "Michael Lee",
+...     "tags": ["API", "Backend", "HTTP"],
+...     "publishedDate": ISODate("2025-06-30T00:00:00Z")
+...   }
+... ]
+...
+... )
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('68e525b5d23e7a14d6cebea9'),
+    '1': ObjectId('68e525b5d23e7a14d6cebeaa'),
+    '2': ObjectId('68e525b5d23e7a14d6cebeab'),
+    '3': ObjectId('68e525b5d23e7a14d6cebeac'),
+    '4': ObjectId('68e525b5d23e7a14d6cebead')
+  }
+}
+lab> db.posts.createIndex({ author: 1})
+author_1
+lab> db.posts.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { author: 1 }, name: 'author_1' }
+]
+lab> db.posts.createIndex({ publishedDate: -1})
+publishedDate_-1
+lab> db.posts.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { author: 1 }, name: 'author_1' },
+  { v: 2, key: { publishedDate: -1 }, name: 'publishedDate_-1' }
+]
+lab> db.posts.dropIndex("author_1)
+Uncaught:
+SyntaxError: Unterminated string constant. (1:19)
+
+> 1 | db.posts.dropIndex("author_1)
+    |                    ^
+  2 |
+
+lab> db.posts.dropIndex("author_1")
+{ nIndexesWas: 3, ok: 1 }
+lab>
