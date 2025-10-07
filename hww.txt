@@ -1,0 +1,67 @@
+lab> db.products.insertMany([{"name": "Laptop", "category": "Electronics", "price": 800, "stock": 15 },
+...   { "name": "Smartphone", "category": "Electronics", "price": 600, "stock": 30 },
+...   { "name": "Coffee Maker", "category": "Home Appliances", "price": 120, "stock": 10 },
+...   { "name": "Office Chair", "category": "Furniture", "price": 150, "stock": 20 },
+...   { "name": "Electric Kettle", "category": "Home Appliances", "price": 50, "stock": 25 }
+... ])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('68e52c60d23e7a14d6cebeae'),
+    '1': ObjectId('68e52c60d23e7a14d6cebeaf'),
+    '2': ObjectId('68e52c60d23e7a14d6cebeb0'),
+    '3': ObjectId('68e52c60d23e7a14d6cebeb1'),
+    '4': ObjectId('68e52c60d23e7a14d6cebeb2')
+  }
+}
+lab> db.products.createIndex({category: 1})
+category_1
+lab> db.products.createIndex({price: -1})
+price_-1
+lab> db.products.find().sort({ price: -1})
+[
+  {
+    _id: ObjectId('68e52c60d23e7a14d6cebeae'),
+    name: 'Laptop',
+    category: 'Electronics',
+    price: 800,
+    stock: 15
+  },
+  {
+    _id: ObjectId('68e52c60d23e7a14d6cebeaf'),
+    name: 'Smartphone',
+    category: 'Electronics',
+    price: 600,
+    stock: 30
+  },
+  {
+    _id: ObjectId('68e52c60d23e7a14d6cebeb1'),
+    name: 'Office Chair',
+    category: 'Furniture',
+    price: 150,
+    stock: 20
+  },
+  {
+    _id: ObjectId('68e52c60d23e7a14d6cebeb0'),
+    name: 'Coffee Maker',
+    category: 'Home Appliances',
+    price: 120,
+    stock: 10
+  },
+  {
+    _id: ObjectId('68e52c60d23e7a14d6cebeb2'),
+    name: 'Electric Kettle',
+    category: 'Home Appliances',
+    price: 50,
+    stock: 25
+  }
+]
+lab> db.products.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { category: 1 }, name: 'category_1' },
+  { v: 2, key: { price: -1 }, name: 'price_-1' }
+]
+lab> db.products.dropIndex("category_1")
+d{ nIndexesWas: 3, ok: 1 }
+lab>
