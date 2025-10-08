@@ -1,0 +1,59 @@
+use MongoExam
+switched to db MongoExam
+MongoExam> db.employee.insertMany([{_id: 1, name: "raju", department: "sales", leave: 1}, {_id: 2, name: "sangeetha", department: "sales", leave: 3}, {_id: 3, name: "vinay", department: "operations", leave: 8}, {_id: 4, name: "abey", department: "packing", leave: 2}, {_id: 5, name: "thomas", department: "packing", leave: 1}, {_id: 6, name: "muneer", department: "operations", leave: 7}, {_id: 7, name: "aparna", department: "sales", leave: 3}, {_id: 8, name: "abid", department: "operations", leave: 9}, {_id: 9, name: "fathima", department: "sales", leave: 11}, {_id: 10, name: "varghese", department: "operations", leave: 14}]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': 1,
+    '1': 2,
+    '2': 3,
+    '3': 4,
+    '4': 5,
+    '5': 6,
+    '6': 7,
+    '7': 8,
+    '8': 9,
+    '9': 10
+  }
+}
+MongoExam> db.employee.find({$and: [{leave: {$gt: 5}}, {department: "sales"}]}, {name: 1, _id: 0})
+[ { name: 'fathima' } ]
+MongoExam> db.employee.countDocuments({department: "operations"})
+4
+MongoExam> db.employee.aggregate([{$group: {_id: "$department", TotalEmployees: {$sum: 1}}}])
+[
+  { _id: 'sales', TotalEmployees: 4 },
+  { _id: 'packing', TotalEmployees: 2 },
+  { _id: 'operations', TotalEmployees: 4 }
+]
+MongoExam> db.employee.aggregate([{$group: {_id: "$department", TotalLeaves: {$sum: "$leave"}}}, {$match: {TotalLeaves: {$gt: 10}}}])
+[
+  { _id: 'sales', TotalLeaves: 18 },
+  { _id: 'operations', TotalLeaves: 38 }
+]
+MongoExam> db.exam.insertMany([{_id: 1, employee_id: 2, exam_status: "pass"}, {_id: 2, employee_id: 5, exam_status: "fail"}, {_id: 3, employee_id: 1, exam_status: "fail"}, {_id: 4, employee_id: 8, exam_status: "pass"}, {_id: 5, employee_id: 3, exam_status: "pass"}, {_id: 6, employee_id: 1, exam_status: "pass"}, {_id: 7, employee_id: 6, exam_status: "fail"}, {_id: 8, employee_id: 9, exam_status: "pass"}, {_id: 9, employee_id: 10, exam_status: "pass"}]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': 1,
+    '1': 2,
+    '2': 3,
+    '3': 4,
+    '4': 5,
+    '5': 6,
+    '6': 7,
+    '7': 8,
+    '8': 9
+  }
+}
+MongoExam> db.exam.aggregate([{$match: {exam_status: "pass"}}, {$lookup: {from: "employee", localField: "employee_id", foreignField: "_id", as: "newe"}}, {$$unwind: "$newe"}, {$project: {_id: 0, name: "$newe.name", exam_status: 1}}])
+[
+  { exam_status: 'pass', name: 'sangeetha' },
+  { exam_status: 'pass', name: 'abid' },
+  { exam_status: 'pass', name: 'vinay' },
+  { exam_status: 'pass', name: 'raju' },
+  { exam_status: 'pass', name: 'fathima' },
+  { exam_status: 'pass', name: 'varghese' }
+]
+MongoExam> db.employee.aggregate([{$lookup: {from: "exam", localField: "_id", foreignField: "employee_id", as: "info"}}, {$match: {info: {$size: 0}}}, {$pro$project: {_id: 0, name: 1}}])
+[ { name: 'abey' }, { name: 'aparna' } ]
